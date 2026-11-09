@@ -43,7 +43,6 @@ class _MapHomePageState extends State<MapHomePage> {
 
   MapLibreMapController? _mapController;
   bool _mapReady = false;
-  String? _mapError;
 
   void _onMapCreated(MapLibreMapController controller) {
     _mapController = controller;
@@ -53,13 +52,7 @@ class _MapHomePageState extends State<MapHomePage> {
     if (!mounted) return;
     setState(() {
       _mapReady = true;
-      _mapError = null;
     });
-  }
-
-  void _onMapError(Object error) {
-    if (!mounted) return;
-    setState(() => _mapError = error.toString());
   }
 
   Future<void> _goToOdesa() async {
@@ -103,7 +96,6 @@ class _MapHomePageState extends State<MapHomePage> {
             myLocationEnabled: false,
             onMapCreated: _onMapCreated,
             onStyleLoadedCallback: _onStyleLoaded,
-            onMapError: _onMapError,
           ),
           Positioned(
             top: 14,
@@ -143,7 +135,7 @@ class _MapHomePageState extends State<MapHomePage> {
               child: const Icon(Icons.location_city),
             ),
           ),
-          if (!_mapReady && _mapError == null)
+          if (!_mapReady)
             const Center(
               child: Card(
                 child: Padding(
@@ -155,22 +147,6 @@ class _MapHomePageState extends State<MapHomePage> {
                       SizedBox(width: 12),
                       Text('Загружаем 3D-карту…'),
                     ],
-                  ),
-                ),
-              ),
-            ),
-          if (_mapError != null)
-            Positioned(
-              left: 16,
-              right: 16,
-              bottom: 90,
-              child: Card(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(12),
-                  child: Text(
-                    'Не удалось загрузить карту. Проверьте интернет и попробуйте снова.\n$_mapError',
-                    style: const TextStyle(fontSize: 12),
                   ),
                 ),
               ),
